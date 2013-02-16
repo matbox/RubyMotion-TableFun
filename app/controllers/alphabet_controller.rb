@@ -3,7 +3,8 @@ class AlphabetController < UIViewController
     super
 
     self.title = "Alphabet"
-    @table = UITableView.alloc.initWithFrame(self.view.bounds)
+    @table = UITableView.alloc.initWithFrame(self.view.bounds,
+      style: UITableViewStyleGrouped)
     @table.autoresizingMask = UIViewAutoresizingFlexibleHeight
     self.view.addSubview(@table)
 
@@ -82,6 +83,18 @@ class AlphabetController < UIViewController
 
   def tableView(tableView, sectionForSectionIndexTitle: title, atIndex: index)
     sections.index title
+  end
+
+  def tableView(tableView, editingStyleForRowAtIndexPath: indexPath)
+    UITableViewCellEditingStyleDelete
+  end
+
+  def tableView(tableView, commitEditingStyle:editingStyle, forRowAtIndexPath: indexPath)
+    if editingStyle == UITableViewCellEditingStyleDelete
+      rows_for_section(indexPath.section).delete_at indexPath.row
+      tableView.deleteRowsAtIndexPaths([indexPath],
+        withRowAnimation:UITableViewRowAnimationFade)
+    end
   end
 
 end
